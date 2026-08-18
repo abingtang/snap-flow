@@ -1,0 +1,54 @@
+# Xcode
+build/
+macos/build/
+DerivedData/
+*.xcuserstate
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+xcuserdata/
+*.xcscmblueprint
+*.xcworkspace
+!default.xcworkspace
+timeline.xctimeline
+playground.xcworkspace
+
+# Signing local
+macos/Configurations/Signing.xcconfig
+
+# 安装包与本地发行产物（方案 A：源码进 Git，安装包进 GitHub Releases）
+dist/
+macos/dist/
+releases/
+*.app
+*.dmg
+*.pkg
+# 发行用 zip 仅在 macos/dist/ 生成；不忽略仓库内其它小资源 zip
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# SwiftPM
+.swiftpm/
+.build/
+Packages/
+Package.pins
+Package.resolved
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*~
+tmp/
+
+# VitePress 用户文档（docs-site）
+docs-site/node_modules/
+docs-site/dist/
+docs-site/.vitepress/cache/
+docs-site/.vitepress/dist/
