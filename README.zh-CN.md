@@ -10,8 +10,8 @@
 
 <p align="center">
   <a href="https://zeycode.cn/snapflow/">用户手册</a> ·
-  <a href="https://github.com/abingtang/abingtang-snap-flow/releases/latest">下载安装</a> ·
-  <a href="https://github.com/abingtang/abingtang-snap-flow">GitHub</a> ·
+  <a href="https://github.com/abingtang/snap-flow/releases/latest">下载安装</a> ·
+  <a href="https://github.com/abingtang/snap-flow">GitHub</a> ·
   <a href="README.md">English</a>
 </p>
 
@@ -36,7 +36,7 @@ SnapFlow 是一款以 macOS 为主线的桌面工具，用于把屏幕内容转�
 
 ## 下载安装
 
-普通用户请从 [GitHub Releases](https://github.com/abingtang/abingtang-snap-flow/releases/latest) 下载最新安装包。打开 ZIP 或 DMG 后，将 `SnapFlow.app` 移入「应用程序」。
+普通用户请从 [GitHub Releases](https://github.com/abingtang/snap-flow/releases/latest) 下载最新安装包。打开 ZIP 或 DMG 后，将 `SnapFlow.app` 移入「应用程序」。
 
 当前发行包面向 Apple Silicon（`arm64`），系统要求为 macOS 15.0 或更高版本。Intel Mac 可以从源码构建。
 
@@ -63,8 +63,8 @@ SnapFlow 是一款以 macOS 为主线的桌面工具，用于把屏幕内容转�
 ### 打开工程
 
 ```bash
-git clone https://github.com/abingtang/abingtang-snap-flow.git
-cd abingtang-snap-flow
+git clone https://github.com/abingtang/snap-flow.git
+cd snap-flow
 open macos/SnapFlow.xcodeproj
 ```
 
@@ -96,7 +96,7 @@ xcodebuild \
 
 ## 仓库约定
 
-源码和文档进入 Git，安装包通过 [GitHub Releases](https://github.com/abingtang/abingtang-snap-flow/releases) 分发。不要提交构建产物、App 包、本地签名配置、凭据或 API Key。
+源码和文档进入 Git，安装包通过 [GitHub Releases](https://github.com/abingtang/snap-flow/releases) 分发。不要提交构建产物、App 包、本地签名配置、凭据或 API Key。
 
 提交说明使用仓库约定的 `类型：简短说明` 格式，例如：
 

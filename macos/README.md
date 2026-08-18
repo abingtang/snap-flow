@@ -12,7 +12,7 @@
 <p align="center">
   <a href="../README.md">Project README</a> ·
   <a href="https://zeycode.cn/snapflow/">User Guide</a> ·
-  <a href="https://github.com/abingtang/abingtang-snap-flow/releases/latest">Download</a> ·
+  <a href="https://github.com/abingtang/snap-flow/releases/latest">Download</a> ·
   <a href="README.zh-CN.md">简体中文</a>
 </p>
 
@@ -32,11 +32,11 @@ SnapFlow macOS is built with Swift 6, SwiftUI, AppKit, ScreenCaptureKit, Vision,
 | System requirement | macOS 15.0 or later |
 | Technology | Swift 6 · SwiftUI + AppKit · ScreenCaptureKit · Vision · Translation |
 | Published architecture | Apple Silicon (`arm64`) |
-| Distribution | [GitHub Releases](https://github.com/abingtang/abingtang-snap-flow/releases) |
+| Distribution | [GitHub Releases](https://github.com/abingtang/snap-flow/releases) |
 
 ## Download and install
 
-Download the latest arm64 ZIP or DMG from [GitHub Releases](https://github.com/abingtang/abingtang-snap-flow/releases/latest), then move `SnapFlow.app` to `Applications`.
+Download the latest arm64 ZIP or DMG from [GitHub Releases](https://github.com/abingtang/snap-flow/releases/latest), then move `SnapFlow.app` to `Applications`.
 
 Intel Macs can build the app from source. System translation availability follows the capabilities of the installed macOS version.
 
@@ -92,8 +92,8 @@ Keys are stored in local settings and are not uploaded to a SnapFlow server. Sna
 ### Open the project
 
 ```bash
-git clone https://github.com/abingtang/abingtang-snap-flow.git
-cd abingtang-snap-flow
+git clone https://github.com/abingtang/snap-flow.git
+cd snap-flow
 open macos/SnapFlow.xcodeproj
 ```
 
@@ -146,7 +146,7 @@ The script reads `MARKETING_VERSION` from the Xcode project and writes the App a
 
 ## Repository conventions
 
-Source code and documentation belong in Git. Installers belong in [GitHub Releases](https://github.com/abingtang/abingtang-snap-flow/releases).
+Source code and documentation belong in Git. Installers belong in [GitHub Releases](https://github.com/abingtang/snap-flow/releases).
 
 Do not commit `build/`, `dist/`, app bundles, installer archives, signing configuration, credentials, or API keys.
 

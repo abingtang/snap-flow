@@ -4,7 +4,7 @@
 > 本地构建输出目录为 `dist/`，已由根目录 `.gitignore` 忽略，**禁止提交**。
 
 **当前版本**：**0.0.4**（与工程 `MARKETING_VERSION` 同步；用下方 `bump-version` 改）  
-**仓库**：https://github.com/abingtang/abingtang-snap-flow  
+**仓库**：https://github.com/abingtang/snap-flow  
 
 ---
 
@@ -174,7 +174,7 @@ git push origin vX.Y.Z
 
 ### 5.2 在网页上发布
 
-1. 打开 https://github.com/abingtang/abingtang-snap-flow/releases/new  
+1. 打开 https://github.com/abingtang/snap-flow/releases/new  
 2. **Choose a tag**：`vX.Y.Z`  
 3. **Release title**：`SnapFlow X.Y.Z`  
 4. **Describe**：系统要求、本版要点、已知限制、权限说明（可用下方模板）  
@@ -184,8 +184,8 @@ git push origin vX.Y.Z
 
 用户入口：
 
-- 最新：https://github.com/abingtang/abingtang-snap-flow/releases/latest  
-- 列表：https://github.com/abingtang/abingtang-snap-flow/releases  
+- 最新：https://github.com/abingtang/snap-flow/releases/latest  
+- 列表：https://github.com/abingtang/snap-flow/releases  
 
 ### 5.3 Release 说明模板
 

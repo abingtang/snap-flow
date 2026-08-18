@@ -12,7 +12,7 @@
 <p align="center">
   <a href="../README.zh-CN.md">项目总览</a> ·
   <a href="https://zeycode.cn/snapflow/">用户手册</a> ·
-  <a href="https://github.com/abingtang/abingtang-snap-flow/releases/latest">下载安装</a> ·
+  <a href="https://github.com/abingtang/snap-flow/releases/latest">下载安装</a> ·
   <a href="README.md">English</a>
 </p>
 
@@ -32,11 +32,11 @@ SnapFlow macOS 使用 Swift 6、SwiftUI、AppKit、ScreenCaptureKit、Vision 和
 | 系统要求 | macOS 15.0 或更高版本 |
 | 技术栈 | Swift 6 · SwiftUI + AppKit · ScreenCaptureKit · Vision · Translation |
 | 发行架构 | Apple Silicon（`arm64`） |
-| 分发方式 | [GitHub Releases](https://github.com/abingtang/abingtang-snap-flow/releases) |
+| 分发方式 | [GitHub Releases](https://github.com/abingtang/snap-flow/releases) |
 
 ## 下载安装
 
-请从 [GitHub Releases](https://github.com/abingtang/abingtang-snap-flow/releases/latest) 下载最新 arm64 ZIP 或 DMG，然后将 `SnapFlow.app` 移入「应用程序」。
+请从 [GitHub Releases](https://github.com/abingtang/snap-flow/releases/latest) 下载最新 arm64 ZIP 或 DMG，然后将 `SnapFlow.app` 移入「应用程序」。
 
 Intel Mac 可以从源码构建。系统翻译能力取决于当前 macOS 版本提供的系统能力。
 
@@ -92,8 +92,8 @@ Intel Mac 可以从源码构建。系统翻译能力取决于当前 macOS 版本
 ### 打开工程
 
 ```bash
-git clone https://github.com/abingtang/abingtang-snap-flow.git
-cd abingtang-snap-flow
+git clone https://github.com/abingtang/snap-flow.git
+cd snap-flow
 open macos/SnapFlow.xcodeproj
 ```
 
@@ -146,7 +146,7 @@ cd macos
 
 ## 仓库约定
 
-源码和文档进入 Git，安装包通过 [GitHub Releases](https://github.com/abingtang/abingtang-snap-flow/releases) 分发。不要提交 `build/`、`dist/`、App 包、安装包、本地签名配置、凭据或 API Key。
+源码和文档进入 Git，安装包通过 [GitHub Releases](https://github.com/abingtang/snap-flow/releases) 分发。不要提交 `build/`、`dist/`、App 包、安装包、本地签名配置、凭据或 API Key。
 
 提交说明使用仓库约定的 `类型：简短说明` 格式，例如：
 

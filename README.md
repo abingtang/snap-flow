@@ -11,8 +11,8 @@
 
 <p align="center">
   <a href="https://zeycode.cn/snapflow/">User Guide</a> ·
-  <a href="https://github.com/abingtang/abingtang-snap-flow/releases/latest">Download</a> ·
-  <a href="https://github.com/abingtang/abingtang-snap-flow">GitHub</a> ·
+  <a href="https://github.com/abingtang/snap-flow/releases/latest">Download</a> ·
+  <a href="https://github.com/abingtang/snap-flow">GitHub</a> ·
   <a href="README.zh-CN.md">简体中文</a>
 </p>
 
@@ -37,7 +37,7 @@ SnapFlow is a macOS-first desktop utility for turning screen content into useful
 
 ## Download
 
-Most users should download the latest package from [GitHub Releases](https://github.com/abingtang/abingtang-snap-flow/releases/latest). Open the ZIP or DMG and move `SnapFlow.app` to `Applications`.
+Most users should download the latest package from [GitHub Releases](https://github.com/abingtang/snap-flow/releases/latest). Open the ZIP or DMG and move `SnapFlow.app` to `Applications`.
 
 The published package targets Apple Silicon (`arm64`) and requires macOS 15.0 or later. Intel Macs can build the app from source.
 
@@ -66,8 +66,8 @@ Cloud OCR and translation services require API keys configured in the app. Keys 
 ### Open the project
 
 ```bash
-git clone https://github.com/abingtang/abingtang-snap-flow.git
-cd abingtang-snap-flow
+git clone https://github.com/abingtang/snap-flow.git
+cd snap-flow
 open macos/SnapFlow.xcodeproj
 ```
 
@@ -99,7 +99,7 @@ For a local signing configuration, use [`macos/Configurations/Signing.xcconfig.e
 
 ## Repository conventions
 
-Source code and documentation belong in Git. Installers belong in [GitHub Releases](https://github.com/abingtang/abingtang-snap-flow/releases). Do not commit build products, app bundles, signing configuration, credentials, or API keys.
+Source code and documentation belong in Git. Installers belong in [GitHub Releases](https://github.com/abingtang/snap-flow/releases). Do not commit build products, app bundles, signing configuration, credentials, or API keys.
 
 Commit messages use the repository convention `Type: short description`, for example:
 
