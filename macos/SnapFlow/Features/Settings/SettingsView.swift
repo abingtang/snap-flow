@@ -78,7 +78,7 @@ enum SettingsPane: String, CaseIterable, Identifiable, Hashable {
             ]
         case .about:
             [
-                L10n.string("关于"), L10n.string("版本"), "SnapFlow", L10n.string("功能"), L10n.string("截图"), L10n.string("贴图"), "OCR", L10n.string("翻译"),
+                L10n.string("关于"), L10n.string("版本"), L10n.string("检查更新"), L10n.string("更新"), "update", "SnapFlow", L10n.string("功能"), L10n.string("截图"), L10n.string("贴图"), "OCR", L10n.string("翻译"),
                 L10n.string("划词"), L10n.string("录制"), L10n.string("剪切板"), L10n.string("历史"), L10n.string("收藏"), L10n.string("大模型"), L10n.string("流式"),
             ]
         }
@@ -1224,6 +1224,8 @@ struct SettingsView: View {
                     .dynamicTypeSize(SettingsTypography.contentTypeRange)
                     .foregroundStyle(AppTheme.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
+
+                    AboutUpdateCheckView(currentVersion: aboutMarketingVersion)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 4)
@@ -1286,13 +1288,21 @@ struct SettingsView: View {
         }
     }
 
-    private var aboutVersionString: String {
+    private var aboutMarketingVersion: String {
         let short = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+        if let short, !short.isEmpty {
+            return short
+        }
+        return "0.0.0"
+    }
+
+    private var aboutVersionString: String {
+        let short = aboutMarketingVersion
         let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String
-        if let short, let build, !build.isEmpty, build != short {
+        if let build, !build.isEmpty, build != short, short != "0.0.0" {
             return "v\(short) (\(build))"
         }
-        if let short, !short.isEmpty {
+        if short != "0.0.0" {
             return "v\(short)"
         }
         return "v0.0.1"

@@ -462,6 +462,9 @@ final class PanelPresenter {
             guard let self, let panel, let session else { return event }
             // 仅当事件窗口是本 OCR 窗时拦截
             guard event.window === panel || panel.isKeyWindow else { return event }
+            if TextInputSession.isComposing(in: event.window) {
+                return event
+            }
             guard let settings = self.container?.settings else { return event }
 
             if settings.matches(.ocrRetry, event: event) {
@@ -1381,6 +1384,9 @@ final class PanelPresenter {
             [weak self, weak panel, weak session] event in
             guard let self, let panel, let session else { return event }
             guard event.window === panel || panel.isKeyWindow else { return event }
+            if TextInputSession.isComposing(in: event.window) {
+                return event
+            }
             guard let settings = self.container?.settings else { return event }
             if settings.matches(.ocrClose, event: event)
                 || settings.matches(.ocrCloseCommandW, event: event)

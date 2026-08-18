@@ -28,7 +28,7 @@ SnapFlow macOS 使用 Swift 6、SwiftUI、AppKit、ScreenCaptureKit、Vision 和
 
 | 项目 | 当前值 |
 |------|--------|
-| 版本 | **0.0.4** |
+| 版本 | **0.0.5** |
 | 系统要求 | macOS 15.0 或更高版本 |
 | 技术栈 | Swift 6 · SwiftUI + AppKit · ScreenCaptureKit · Vision · Translation |
 | 发行架构 | Apple Silicon（`arm64`） |

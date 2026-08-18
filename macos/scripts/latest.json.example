@@ -1,0 +1,10 @@
+{
+  "version": "0.0.4",
+  "build": "4",
+  "minOS": "15.0",
+  "publishedAt": "2026-08-18T06:00:00Z",
+  "notes": "SnapFlow 0.0.4",
+  "notesURL": "https://zeycode.cn/snapflow/changelog.html",
+  "downloadURL": "https://zeycode.cn/snapflow/downloads/latest/SnapFlow-arm64.dmg",
+  "mandatory": false
+}

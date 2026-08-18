@@ -160,6 +160,9 @@ private final class RegionSelectorSession: NSObject {
         }
         localKey = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] e in
             MainThreadWatchdog.shared.noteMainAlive()
+            if TextInputSession.isComposing(in: e.window) {
+                return e
+            }
             if self?.settings.matches(.captureCancel, event: e) == true {
                 self?.finish(nil)
                 return nil
@@ -1686,7 +1689,14 @@ private final class RegionSelectionView: NSView {
             if settings.matches(.captureClearAnnotations, event: event) { annotateCanvas.clearAll(); return }
             if settings.matches(.captureUndo, event: event) { annotateCanvas.undo(); return }
             if settings.matches(.captureRedo, event: event) { annotateCanvas.redo(); return }
-            if settings.matches(.captureConfirm, event: event) { handleToolbar(.copy); return }
+            if settings.matches(.captureConfirm, event: event) {
+                if TextInputSession.isComposing(in: window) || TextInputSession.isEditing(in: window) {
+                    super.keyDown(with: event)
+                    return
+                }
+                handleToolbar(.copy)
+                return
+            }
             if settings.matches(.captureToggleToolbar, event: event) {
                 toolbar.isHidden.toggle()
                 actionToolbar.isHidden = toolbar.isHidden

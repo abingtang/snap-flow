@@ -2504,23 +2504,6 @@
         }
       }
     },
-    "settings.general.launch_at_login_hint" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start SnapFlow automatically after you log in (requires Login Items permission)."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "系统登录后自动启动 SnapFlow（需配合系统登录项权限）。"
-          }
-        }
-      }
-    },
     "settings.general.launch_at_login_approval" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2551,6 +2534,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "登录启动设置失败，请检查系统设置中的登录项。"
+          }
+        }
+      }
+    },
+    "settings.general.launch_at_login_hint" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start SnapFlow automatically after you log in (requires Login Items permission)."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "系统登录后自动启动 SnapFlow（需配合系统登录项权限）。"
           }
         }
       }
@@ -5516,6 +5516,23 @@
         }
       }
     },
+    "前往下载" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前往下载"
+          }
+        }
+      }
+    },
     "剪切板" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -6141,6 +6158,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "双向"
+          }
+        }
+      }
+    },
+    "发现新版本 %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@ is available"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发现新版本 %@"
           }
         }
       }
@@ -6991,23 +7025,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "填写本地模型 ID"
-          }
-        }
-      }
-    },
-    "推荐翻译专用模型：%@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recommended translation model: %@"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "推荐翻译专用模型：%@"
           }
         }
       }
@@ -8504,6 +8521,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已收藏"
+          }
+        }
+      }
+    },
+    "已是最新版本" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You’re up to date"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已是最新版本"
           }
         }
       }
@@ -10531,6 +10565,23 @@
         }
       }
     },
+    "打开 OCR 设置" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open OCR Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开 OCR 设置"
+          }
+        }
+      }
+    },
     "打开/关闭标注工具栏" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -10629,6 +10680,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打开系统设置"
+          }
+        }
+      }
+    },
+    "打开翻译服务设置" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Translation Service Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开翻译服务设置"
+          }
+        }
+      }
+    },
+    "打开翻译设置" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Translation Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开翻译设置"
           }
         }
       }
@@ -10884,6 +10969,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "推荐方案：⌃⌥ 截图/贴图；⌥⌘ OCR/翻译/剪切板。恢复会覆盖当前全部全局功能热键。"
+          }
+        }
+      }
+    },
+    "推荐翻译专用模型：%@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recommended translation model: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "推荐翻译专用模型：%@"
           }
         }
       }
@@ -12061,6 +12163,23 @@
         }
       }
     },
+    "无法检查更新" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t check for updates"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法检查更新"
+          }
+        }
+      }
+    },
     "无法编码翻译请求" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -12652,6 +12771,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "暂无译文可复制"
+          }
+        }
+      }
+    },
+    "更新" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updates"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新"
           }
         }
       }
@@ -13489,6 +13625,23 @@
         }
       }
     },
+    "检查更新" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check for Updates"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查更新"
+          }
+        }
+      }
+    },
     "检测下面文本的语言并翻译成\\(targetName)，只输出译文，不要解释。\n\n\\(text)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -13757,6 +13910,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在录制快捷键"
+          }
+        }
+      }
+    },
+    "正在检查更新…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checking for updates…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在检查更新…"
           }
         }
       }
@@ -16906,6 +17076,23 @@
         }
       }
     },
+    "翻译未返回结果，请重试" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Translation returned no result. Please try again."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "翻译未返回结果，请重试"
+          }
+        }
+      }
+    },
     "翻译模型" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -19456,6 +19643,23 @@
         }
       }
     },
+    "重新识别" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recognize Again"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新识别"
+          }
+        }
+      }
+    },
     "重置位置" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -19503,6 +19707,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "重试导出 GIF"
+          }
+        }
+      }
+    },
+    "重试此服务" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry This Service"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重试此服务"
           }
         }
       }
@@ -20676,108 +20897,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "默认连接本机 Ollama，文本不会离开本机；如果填写远程地址，文本将发送到该地址。"
-          }
-        }
-      }
-    },
-    "打开 OCR 设置" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open OCR Settings"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开 OCR 设置"
-          }
-        }
-      }
-    },
-    "打开翻译服务设置" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Translation Service Settings"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开翻译服务设置"
-          }
-        }
-      }
-    },
-    "打开翻译设置" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Translation Settings"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开翻译设置"
-          }
-        }
-      }
-    },
-    "翻译未返回结果，请重试" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Translation returned no result. Please try again."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "翻译未返回结果，请重试"
-          }
-        }
-      }
-    },
-    "重新识别" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recognize Again"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重新识别"
-          }
-        }
-      }
-    },
-    "重试此服务" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Retry This Service"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重试此服务"
           }
         }
       }

@@ -3,7 +3,7 @@
 > **原则**：源代码只进 Git；安装包（`.app` / `.zip` / `.dmg` / `.pkg`）只进 **GitHub Releases**。  
 > 本地构建输出目录为 `dist/`，已由根目录 `.gitignore` 忽略，**禁止提交**。
 
-**当前版本**：**0.0.4**（与工程 `MARKETING_VERSION` 同步；用下方 `bump-version` 改）  
+**当前版本**：**0.0.5**（与工程 `MARKETING_VERSION` 同步；用下方 `bump-version` 改）  
 **仓库**：https://github.com/abingtang/snap-flow  
 
 ---
@@ -112,7 +112,8 @@ VERSION=X.Y.Z ARCH=arm64 ./scripts/package-release.sh
 2. 将 `SnapFlow.app` 复制到 `dist/SnapFlow.app`  
 3. 生成 `dist/SnapFlow-${VERSION}-${ARCH}.zip`  
 4. 生成 **拖拽安装** `dist/SnapFlow-${VERSION}-${ARCH}.dmg`  
-5. 打印上传 Releases 的提示  
+5. 生成 `dist/latest.json`（设置 → 关于「检查更新」读取）
+6. 打印上传 Releases / 服务器的提示
 
 环境变量：
 
@@ -121,6 +122,9 @@ VERSION=X.Y.Z ARCH=arm64 ./scripts/package-release.sh
 | `SKIP_DMG=1` | 不生成 DMG，只打 zip |
 | `SKIP_ZIP=1` | 不生成 zip，只打 DMG |
 | `VERSION` / `ARCH` | 覆盖版本号与架构后缀 |
+| `BUILD` | 覆盖写入 `latest.json` 的 build 号 |
+| `UPDATE_DOWNLOAD_URL` | 覆盖清单里的下载地址 |
+| `UPDATE_NOTES_URL` | 覆盖清单里的更新说明地址 |
 
 DMG 制作：若本机已安装 [`create-dmg`](https://github.com/create-dmg/create-dmg)（`brew install create-dmg`）则优先使用；否则用系统 `hdiutil` + Finder 布局脚本。资源在 `scripts/dmg-resources/background.png`。
 
@@ -253,7 +257,43 @@ push tag v* → macOS runner → Release 构建 → 签名 → 公证 → 上传
 
 ---
 
-## 8. 发版检查清单
+## 8. 检查更新清单（`latest.json`）
+
+设置 → 关于的「检查更新」会 `GET`：
+
+`https://zeycode.cn/snapflow/downloads/latest.json`
+
+字段约定：
+
+| 字段 | 必填 | 说明 |
+|------|------|------|
+| `version` | 是 | 语义化版本，与 `MARKETING_VERSION` 比大小 |
+| `downloadURL` | 是 | 必须是 `https`，通常指向 latest DMG |
+| `build` / `minOS` / `notes` / `notesURL` / `sha256` / `mandatory` | 否 | 当前客户端只展示 `notes`，并用 `downloadURL` 打开下载 |
+
+**不要**把该文件放到 VitePress 文档站目录。`/snapflow/` 未命中路径会回 HTML，App 会判定检查失败。
+
+nginx 示例：
+
+```nginx
+location = /snapflow/downloads/latest.json {
+    default_type application/json;
+    add_header Cache-Control "no-cache";
+}
+```
+
+发版后用下面命令确认返回的是 JSON，不是文档页：
+
+```bash
+curl -sI https://zeycode.cn/snapflow/downloads/latest.json
+curl -s https://zeycode.cn/snapflow/downloads/latest.json
+```
+
+模板见 `macos/scripts/latest.json.example`；正式文件由 `package-release.sh` 写到 `dist/latest.json`。
+
+---
+
+## 9. 发版检查清单
 
 - [ ] `./scripts/bump-version.sh X.Y.Z` 已执行（或确认 MARKETING_VERSION 正确）
 - [ ] `./scripts/check-version-sync.sh` 通过
@@ -264,11 +304,13 @@ push tag v* → macOS runner → Release 构建 → 签名 → 公证 → 上传
 - [ ] 未将 `dist/` 加入 git
 - [ ] 已推送 annotated tag `vX.Y.Z`
 - [ ] GitHub Release 已挂上 dmg（及可选 zip），并写清权限与系统要求
+- [ ] 已把 `dist/latest.json` 上传到 `https://zeycode.cn/snapflow/downloads/latest.json`（`Content-Type: application/json`，勿回退到文档站 HTML）
+- [ ] 已覆盖服务器 `…/downloads/latest/SnapFlow-arm64.dmg`，且 JSON 里的 `version` 与本包一致
 - [ ] （公开版）Developer ID 签名 + 公证 + staple
 
 ---
 
-## 9. 相关文档
+## 10. 相关文档
 
 | 文档 | 内容 |
 |------|------|

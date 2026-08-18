@@ -1099,6 +1099,11 @@ struct ClipboardHistoryView: View {
     }
 
     private func handle(_ event: NSEvent) -> Bool {
+        // 输入法候选框 / marked text 未提交时，回车、空格、方向键必须交给输入法。
+        if TextInputSession.isComposing(in: event.window) {
+            return false
+        }
+
         let settings = container.settings
 
         // 方向键优先：无修饰时直接按 keyCode 导航。

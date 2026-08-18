@@ -890,6 +890,9 @@ struct TranslatePopupView: View {
 
     private func installKeyMonitor() {
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            if TextInputSession.isComposing(in: event.window) {
+                return event
+            }
             if Self.isEditingText(in: event.window) {
                 if event.keyCode == 53 {
                     onClose()

@@ -31,10 +31,26 @@ read_marketing_version() {
   echo "$v"
 }
 
+read_current_project_version() {
+  local v
+  v="$(grep -m1 'CURRENT_PROJECT_VERSION' "$ROOT/SnapFlow.xcodeproj/project.pbxproj" \
+    | sed -E 's/.*CURRENT_PROJECT_VERSION = ([^;]+);/\1/' \
+    | tr -d '[:space:]')"
+  if [[ -z "${v:-}" ]]; then
+    echo "无法从 project.pbxproj 读取 CURRENT_PROJECT_VERSION" >&2
+    exit 1
+  fi
+  echo "$v"
+}
+
 VERSION="${VERSION:-$(read_marketing_version)}"
+BUILD="${BUILD:-$(read_current_project_version)}"
 DIST_DIR="$ROOT/dist"
 ZIP_NAME="SnapFlow-${VERSION}-${ARCH}.zip"
 DMG_NAME="SnapFlow-${VERSION}-${ARCH}.dmg"
+LATEST_JSON_NAME="latest.json"
+UPDATE_DOWNLOAD_URL="${UPDATE_DOWNLOAD_URL:-https://zeycode.cn/snapflow/downloads/latest/SnapFlow-arm64.dmg}"
+UPDATE_NOTES_URL="${UPDATE_NOTES_URL:-https://zeycode.cn/snapflow/changelog.html}"
 # 卷名不宜过长；Finder 窗口标题用此名称。
 DMG_VOLUME_NAME="SnapFlow ${VERSION}"
 
@@ -177,6 +193,7 @@ EOF
 
 echo "==> SnapFlow package-release"
 echo "    version:  $VERSION"
+echo "    build:    $BUILD"
 echo "    arch:     $ARCH"
 echo "    config:   $CONFIGURATION"
 echo "    derived:  $DERIVED_DATA"
@@ -245,6 +262,45 @@ if [[ "$SKIP_DMG" != "1" ]]; then
   create_drag_to_applications_dmg "$DIST_DIR/SnapFlow.app" "$DIST_DIR/$DMG_NAME"
 fi
 
+write_latest_json() {
+  local sha=""
+  local hash_src=""
+  if [[ "$SKIP_DMG" != "1" && -f "$DIST_DIR/$DMG_NAME" ]]; then
+    hash_src="$DIST_DIR/$DMG_NAME"
+  elif [[ "$SKIP_ZIP" != "1" && -f "$DIST_DIR/$ZIP_NAME" ]]; then
+    hash_src="$DIST_DIR/$ZIP_NAME"
+  fi
+  if [[ -n "$hash_src" ]]; then
+    sha="$(shasum -a 256 "$hash_src" | awk '{print $1}')"
+  fi
+
+  python3 - "$DIST_DIR/$LATEST_JSON_NAME" "$VERSION" "$BUILD" "$UPDATE_DOWNLOAD_URL" "$UPDATE_NOTES_URL" "$sha" <<'PY'
+import json
+import sys
+from datetime import datetime, timezone
+
+out, version, build, download_url, notes_url, sha256 = sys.argv[1:7]
+payload = {
+    "version": version,
+    "build": build,
+    "minOS": "15.0",
+    "publishedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    "notes": f"SnapFlow {version}",
+    "notesURL": notes_url,
+    "downloadURL": download_url,
+    "mandatory": False,
+}
+if sha256:
+    payload["sha256"] = sha256
+with open(out, "w", encoding="utf-8") as handle:
+    json.dump(payload, handle, ensure_ascii=False, indent=2)
+    handle.write("\n")
+PY
+}
+
+echo "==> Writing $LATEST_JSON_NAME"
+write_latest_json
+
 echo
 echo "==> Done"
 echo "    App:  $DIST_DIR/SnapFlow.app"
@@ -256,6 +312,8 @@ if [[ "$SKIP_DMG" != "1" ]]; then
   echo "    DMG:  $DIST_DIR/$DMG_NAME"
   ls -lh "$DIST_DIR/$DMG_NAME" || true
 fi
+echo "    Feed: $DIST_DIR/$LATEST_JSON_NAME"
+ls -lh "$DIST_DIR/$LATEST_JSON_NAME" || true
 echo
 echo "下一步（安装包不进 Git）："
 echo "  1. git tag -a v${VERSION} -m \"SnapFlow ${VERSION}\""
@@ -267,5 +325,10 @@ fi
 if [[ "$SKIP_DMG" != "1" ]]; then
   echo "       $DIST_DIR/$DMG_NAME   ← 用户双击后拖到「应用程序」"
 fi
+echo "  4. 上传到 SnapFlow 服务器（检查更新读取 latest.json）："
+if [[ "$SKIP_DMG" != "1" ]]; then
+  echo "       $DIST_DIR/$DMG_NAME → …/snapflow/downloads/latest/SnapFlow-arm64.dmg"
+fi
+echo "       $DIST_DIR/$LATEST_JSON_NAME → …/snapflow/downloads/latest.json"
 echo "  可选：brew install create-dmg 以获得更稳定的 DMG 窗口布局"
 echo "  详见 docs/RELEASE.md"
