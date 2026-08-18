@@ -19,7 +19,7 @@
 <p align="center">
   <img alt="macOS 15+" src="https://img.shields.io/badge/macOS-15%2B-111827?logo=apple&logoColor=white">
   <img alt="Swift 6" src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white">
-  <img alt="版本 0.0.4" src="https://img.shields.io/badge/version-0.0.4-orange">
+  <img alt="版本 0.0.5" src="https://img.shields.io/badge/version-0.0.5-orange">
 </p>
 
 SnapFlow macOS 使用 Swift 6、SwiftUI、AppKit、ScreenCaptureKit、Vision 和 Translation 构建。应用将截图到结果的流程放在菜单栏附近，并把有用结果保存在本机，方便之后复用。

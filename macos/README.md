@@ -19,7 +19,7 @@
 <p align="center">
   <img alt="macOS 15+" src="https://img.shields.io/badge/macOS-15%2B-111827?logo=apple&logoColor=white">
   <img alt="Swift 6" src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white">
-  <img alt="Version 0.0.4" src="https://img.shields.io/badge/version-0.0.4-orange">
+  <img alt="Version 0.0.5" src="https://img.shields.io/badge/version-0.0.5-orange">
 </p>
 
 SnapFlow macOS is built with Swift 6, SwiftUI, AppKit, ScreenCaptureKit, Vision, and Translation. The app keeps the capture-to-result flow close to the menu bar while storing useful results locally for later reuse.
