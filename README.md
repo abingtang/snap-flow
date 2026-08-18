@@ -101,12 +101,12 @@ For a local signing configuration, use [`macos/Configurations/Signing.xcconfig.e
 
 Source code and documentation belong in Git. Installers belong in [GitHub Releases](https://github.com/abingtang/abingtang-snap-flow/releases). Do not commit build products, app bundles, signing configuration, credentials, or API keys.
 
-Commit messages use the repository convention `类型：简短说明`, for example:
+Commit messages use the repository convention `Type: short description`, for example:
 
 ```text
-功能：新增截图翻译入口
-修复：调整 OCR 结果窗状态
-文档：完善项目构建说明
+Feature: add screenshot translation entry
+Fix: adjust OCR result window state
+Docs: improve project build notes
 ```
 
 Contributions should keep changes focused and update the relevant user or development documentation when behavior changes.

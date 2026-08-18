@@ -150,10 +150,10 @@ Source code and documentation belong in Git. Installers belong in [GitHub Releas
 
 Do not commit `build/`, `dist/`, app bundles, installer archives, signing configuration, credentials, or API keys.
 
-Commit messages use the repository convention `类型：简短说明`, for example:
+Commit messages use the repository convention `Type: short description`, for example:
 
 ```text
-功能：完善 OCR 结果窗
-修复：调整截图工具栏布局
-文档：完善 macOS 构建说明
+Feature: improve the OCR result window
+Fix: adjust the capture toolbar layout
+Docs: improve the macOS build notes
 ```
