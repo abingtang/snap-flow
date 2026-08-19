@@ -1,11 +1,11 @@
 {
-  "version": "0.0.5",
-  "build": "5",
+  "version": "0.0.6",
+  "build": "6",
   "minOS": "15.0",
-  "publishedAt": "2026-08-18T14:56:19Z",
-  "notes": "SnapFlow 0.0.5",
+  "publishedAt": "2026-08-19T13:40:44Z",
+  "notes": "SnapFlow 0.0.6",
   "notesURL": "https://zeycode.cn/snapflow/changelog.html",
   "downloadURL": "https://zeycode.cn/snapflow/downloads/latest/SnapFlow-arm64.dmg",
   "mandatory": false,
-  "sha256": "f2d91e94e007be36d4cb0a85b6d8fbe1b2fcb0eb44a52cb7ebf4c0f095655bbb"
+  "sha256": "8328e69e6a899521f686c96d3d6878f7212fd68f6febaf784c9c2cb10ef73d35"
 }

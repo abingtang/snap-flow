@@ -83,6 +83,7 @@ final class AppWorkflows {
     private var recordingRegion: CaptureRegion?
     private var recordingEscapeMonitor: Any?
     private var recordingLocalEscapeMonitor: Any?
+    private var isRecordingFinalizing = false
     private var didShowRecordingBlockedFeedback = false
 
     init(
@@ -178,7 +179,7 @@ final class AppWorkflows {
         kind: CaptureOperationKind,
         operation: @escaping @MainActor (CaptureOperationCoordinator.Token) async -> Void
     ) async {
-        if recordingEngine != nil {
+        if recordingEngine != nil, !isRecordingFinalizing {
             if !didShowRecordingBlockedFeedback {
                 didShowRecordingBlockedFeedback = true
                 FeedbackCenter.shared.post(L10n.string("录制进行中，请先停止录制"), level: .info)
@@ -1932,30 +1933,51 @@ final class AppWorkflows {
                     return
                 }
 
+                self.isRecordingFinalizing = true
+                RegionSelectorController.setRecordingActionEnabled(false)
                 self.closeRecordingChrome()
                 let region = self.recordingRegion
                 let screen = self.recordingScreen
 
                 let processing = RecordingProcessingPanel(screen: screen)
                 self.recordingProcessing = processing
+                let cancelProcessing: () -> Void = { [weak self, weak processing] in
+                    guard let self, let processing, self.recordingProcessing === processing else {
+                        return
+                    }
+                    self.cancelRecordingOutput(output, processing: processing)
+                }
                 processing.onClose = { [weak self, weak processing] in
                     guard let self, self.recordingProcessing === processing else { return }
                     self.recordingProcessing = nil
                     AppActivation.endOverlayChrome()
                 }
-                processing.onCancelFormat = { [weak self, weak processing] in
-                    guard let self, self.recordingProcessing === processing else { return }
-                    try? FileManager.default.removeItem(at: output.url)
-                    self.recordingProcessing = nil
-                    self.endScreenRecordingUI()
-                    FeedbackCenter.shared.post(L10n.string("已取消保存录制"))
-                }
+                processing.onCancel = cancelProcessing
+                processing.onCancelFormat = cancelProcessing
 
                 // 固定策略：同一面板直接进入处理；询问策略：先选格式，保存后原地切换到完成态。
                 if let fixed = self.settings.recordingSavePreference.fixedFormat {
                     self.settings.recordingLastSaveFormat = fixed
-                    processing.orderFrontRegardless()
+                    processing.onConfirmFormat = { [weak self, weak processing] format in
+                        guard let self, let processing, self.recordingProcessing === processing else {
+                            return
+                        }
+                        self.settings.recordingLastSaveFormat = format
+                        Task { @MainActor [weak self, weak processing] in
+                            guard let self, let processing else { return }
+                            await self.finalizeRecordingOutput(
+                                output,
+                                format: format,
+                                region: region,
+                                processing: processing
+                            )
+                            self.endScreenRecordingUI(keepingProcessingPanel: true)
+                        }
+                    }
                     processing.showProcessing()
+                    // 固定格式不会经过 showFormatSelection；这里也必须显式激活并前置，
+                    // 否则处理面板可能在其它应用窗口后面创建出来。
+                    AppActivation.focus([processing], makeKey: nil)
                     await self.finalizeRecordingOutput(
                         output,
                         format: fixed,
@@ -2032,13 +2054,31 @@ final class AppWorkflows {
 
         case .gif:
             processing.showExportingGIF()
+            let session = RecordingExporter.GIFExportSession()
+            processing.onCancel = { [weak self, weak processing] in
+                session.cancel()
+                guard let self, let processing, self.recordingProcessing === processing else {
+                    return
+                }
+                self.cancelRecordingOutput(output, processing: processing)
+            }
+            processing.onCancelExport = { session.cancel() }
+            let progressTask = monitorGIFExportProgress(session: session, processing: processing)
+            defer {
+                progressTask.cancel()
+                processing.onCancelExport = nil
+            }
             do {
                 let destination = try ScreenRecordingFileStore.uniqueDestination(
                     format: .gif,
                     template: template,
                     counter: counter
                 )
-                try await RecordingExporter.exportGIF(from: output.url, to: destination)
+                try await RecordingExporter.exportGIF(
+                    from: output.url,
+                    to: destination,
+                    session: session
+                )
                 try? FileManager.default.removeItem(at: output.url)
                 registerRecordingHistory(
                     fileURL: destination,
@@ -2053,6 +2093,7 @@ final class AppWorkflows {
                     _ = FeatureHistoryIO.revealFileInFinder(destination)
                 }
             } catch {
+                guard self.recordingProcessing === processing else { return }
                 // GIF 失败：保留临时 MP4，提供重试/打开。
                 processing.showGIFFailure(
                     temporaryMP4URL: output.url,
@@ -2093,6 +2134,20 @@ final class AppWorkflows {
         processing: RecordingProcessingPanel
     ) async {
         processing.showExportingGIF()
+        let session = RecordingExporter.GIFExportSession()
+        processing.onCancel = { [weak self, weak processing] in
+            session.cancel()
+            guard let self, let processing, self.recordingProcessing === processing else {
+                return
+            }
+            self.cancelRecordingOutput(output, processing: processing)
+        }
+        processing.onCancelExport = { session.cancel() }
+        let progressTask = monitorGIFExportProgress(session: session, processing: processing)
+        defer {
+            progressTask.cancel()
+            processing.onCancelExport = nil
+        }
         let counter = settings.nextRecordingFilenameCounter()
         do {
             let destination = try ScreenRecordingFileStore.uniqueDestination(
@@ -2100,7 +2155,11 @@ final class AppWorkflows {
                 template: settings.recordingFilenameTemplate,
                 counter: counter
             )
-            try await RecordingExporter.exportGIF(from: temporaryMP4URL, to: destination)
+            try await RecordingExporter.exportGIF(
+                from: temporaryMP4URL,
+                to: destination,
+                session: session
+            )
             try? FileManager.default.removeItem(at: temporaryMP4URL)
             registerRecordingHistory(
                 fileURL: destination,
@@ -2115,6 +2174,7 @@ final class AppWorkflows {
                 _ = FeatureHistoryIO.revealFileInFinder(destination)
             }
         } catch {
+            guard self.recordingProcessing === processing else { return }
             processing.showGIFFailure(
                 temporaryMP4URL: temporaryMP4URL,
                 message: error.localizedDescription
@@ -2123,6 +2183,22 @@ final class AppWorkflows {
                 String(format: L10n.string("GIF 重试失败：%@"), error.localizedDescription),
                 level: .error
             )
+        }
+    }
+
+    private func monitorGIFExportProgress(
+        session: RecordingExporter.GIFExportSession,
+        processing: RecordingProcessingPanel
+    ) -> Task<Void, Never> {
+        Task { @MainActor in
+            while !Task.isCancelled {
+                processing.updateGIFExportProgress(session.progress)
+                do {
+                    try await Task.sleep(for: .milliseconds(100))
+                } catch {
+                    break
+                }
+            }
         }
     }
 
@@ -2158,6 +2234,17 @@ final class AppWorkflows {
                 level: .error
             )
         }
+    }
+
+    private func cancelRecordingOutput(
+        _ output: ScreenRecordingOutput,
+        processing: RecordingProcessingPanel
+    ) {
+        try? FileManager.default.removeItem(at: output.url)
+        guard recordingProcessing === processing else { return }
+        recordingProcessing = nil
+        endScreenRecordingUI()
+        FeedbackCenter.shared.post(L10n.string("已取消保存录制"))
     }
 
     private func registerRecordingHistory(
@@ -2208,6 +2295,8 @@ final class AppWorkflows {
         recordingScreen = nil
         recordingRegion = nil
         recordingEngine = nil
+        isRecordingFinalizing = false
+        RegionSelectorController.setRecordingActionEnabled(true)
         didShowRecordingBlockedFeedback = false
     }
 

@@ -1,9 +1,9 @@
 # SnapFlow 发布与版本管理（方案 A）
 
-> **原则**：源代码只进 Git；安装包（`.app` / `.zip` / `.dmg` / `.pkg`）只进 **GitHub Releases**。  
+> **原则**：源代码只进 Git；安装包（`.app` / `.zip` / `.dmg` / `.pkg`）只进入服务器下载目录或 **GitHub Releases**，不进入 Git。
 > 本地构建输出目录为 `dist/`，已由根目录 `.gitignore` 忽略，**禁止提交**。
 
-**当前版本**：**0.0.5**（与工程 `MARKETING_VERSION` 同步；用下方 `bump-version` 改）  
+**当前版本**：**0.0.6**（与工程 `MARKETING_VERSION` 同步；用下方 `bump-version` 改）
 **仓库**：https://github.com/abingtang/snap-flow  
 
 ---
@@ -13,7 +13,7 @@
 | 做法 | 结果 |
 |------|------|
 | 把 `.app` / zip 提交进主仓库 | 历史膨胀、clone 变慢、二进制难合并 |
-| 源码 Git + 安装包 Releases（推荐） | 仓库干净；用户只打开 Releases 下载 |
+| 源码 Git + 安装包分发渠道（推荐） | 仓库干净；用户从服务器或 Releases 下载 |
 
 不使用 Git LFS 存放安装包（除非未来有私有归档硬需求）。
 
@@ -79,15 +79,15 @@
 
 | 引用 | 用途 |
 |------|------|
-| `develop` | 日常开发与功能合并 |
-| `main` | 相对稳定、可打 release tag 的线 |
-| `vX.Y.Z`（annotated tag） | 与一次 GitHub Release **一一对应**，发布后勿改写 tag |
+| `develop` | 日常开发、版本更新与发版准备 |
+| `main` | GitHub 公开发布与 release tag |
+| `vX.Y.Z`（公开发布 annotated tag） | 与一次 GitHub Release **一一对应**，发布后勿改写 tag |
 
 建议流程：
 
 ```text
-develop 功能完成 → 合并到 main → ./scripts/bump-version.sh X.Y.Z → 写 changelog
-  → 打 tag → 打包 → 创建 GitHub Release
+功能完成 → ./scripts/bump-version.sh X.Y.Z → 写 changelog → 打包验证
+  → 按当前仓库的发布分支规则提交并打 tag → 创建 GitHub Release
 ```
 
 ---
@@ -164,11 +164,11 @@ ditto -c -k --keepParent dist/SnapFlow.app dist/SnapFlow-X.Y.Z-arm64.zip
 
 ### 5.1 打 tag 并推送
 
-在**已包含目标代码的提交**上（通常为 `main`）：
+公开仓在**已包含目标代码与版本文档的 `main` 发布提交**上：
 
 ```bash
 git checkout main
-git pull origin main
+git pull --ff-only origin main
 
 # 确认 MARKETING_VERSION 已是 X.Y.Z（./scripts/check-version-sync.sh）
 git tag -a vX.Y.Z -m "SnapFlow X.Y.Z"
@@ -176,14 +176,16 @@ git push origin main
 git push origin vX.Y.Z
 ```
 
-### 5.2 在网页上发布
+发布后勿移动已有 Tag；需要修包时使用新版本号。
 
-1. 打开 https://github.com/abingtang/snap-flow/releases/new  
+### 5.2 在网页上完成草稿
+
+1. 打开发版流程已创建的 Draft Release；没有草稿时再打开 https://github.com/abingtang/snap-flow/releases/new
 2. **Choose a tag**：`vX.Y.Z`  
 3. **Release title**：`SnapFlow X.Y.Z`  
 4. **Describe**：系统要求、本版要点、已知限制、权限说明（可用下方模板）  
 5. **Attach binaries**：上传 `dist/SnapFlow-X.Y.Z-arm64.dmg`（推荐）与可选 zip  
-6. 若仍为预览：勾选 **Set as a pre-release**  
+6. 未完成 Developer ID 签名与公证时，勾选 **Set as a pre-release** 并写清限制
 7. Publish release  
 
 用户入口：
@@ -298,15 +300,16 @@ curl -s https://zeycode.cn/snapflow/downloads/latest.json
 - [ ] `./scripts/bump-version.sh X.Y.Z` 已执行（或确认 MARKETING_VERSION 正确）
 - [ ] `./scripts/check-version-sync.sh` 通过
 - [ ] `docs-site/changelog.md`（及 en）已**追加**本版章节
-- [ ] `develop` 变更已合并到拟发版分支
+- [ ] 当前仓库的发版分支已包含全部目标变更；未自动合并其他分支
 - [ ] `macos/docs/PROGRESS.md` 变更日志已追加
-- [ ] `cd macos && ./scripts/package-release.sh` 成功，zip / dmg 可启动
+- [ ] `cd macos && SKIP_ZIP=1 ./scripts/package-release.sh` 成功，DMG 自动校验通过（zip 可选）
 - [ ] 未将 `dist/` 加入 git
-- [ ] 已推送 annotated tag `vX.Y.Z`
-- [ ] GitHub Release 已挂上 dmg（及可选 zip），并写清权限与系统要求
+- [ ] 公开仓 `main` 已推送 annotated tag `vX.Y.Z`
+- [ ] GitHub Draft Release 已绑定目标 Tag，并写清权限、系统要求与签名限制
+- [ ] （最终人工步骤）Draft 已上传 dmg（及可选 zip）并 Publish
 - [ ] 已把 `dist/latest.json` 上传到 `https://zeycode.cn/snapflow/downloads/latest.json`（`Content-Type: application/json`，勿回退到文档站 HTML）
 - [ ] 已覆盖服务器 `…/downloads/latest/SnapFlow-arm64.dmg`，且 JSON 里的 `version` 与本包一致
-- [ ] （公开版）Developer ID 签名 + 公证 + staple
+- [ ] （稳定公开版）Developer ID 签名 + 公证 + staple；未完成时保持 Pre-release
 
 ---
 

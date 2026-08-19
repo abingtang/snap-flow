@@ -236,6 +236,10 @@ final class SnipToolbarView: NSView {
         relayout(to: nil)
     }
 
+    func setActionEnabled(_ action: SnipAction, enabled: Bool) {
+        actionButtons[action]?.isEnabled = enabled
+    }
+
     private func refreshShortcutTooltips() {
         guard let settings else { return }
         switch shortcutScope {
@@ -413,14 +417,14 @@ final class SnipToolbarView: NSView {
 
     func cursor(at local: NSPoint) -> NSCursor {
         let overButton = allButtons.contains { button in
-            button.bounds.contains(convert(local, to: button))
+            button.isEnabled && button.bounds.contains(convert(local, to: button))
         }
         return overButton ? .pointingHand : .arrow
     }
 
     private func button(at local: NSPoint) -> SnipToolButton? {
         allButtons.first { button in
-            button.bounds.contains(convert(local, to: button))
+            button.isEnabled && button.bounds.contains(convert(local, to: button))
         }
     }
 
@@ -546,6 +550,15 @@ final class SnipToolButton: NSView {
     private var isPressed = false
     private let usesTitleGlyph: Bool
     private var instantTooltipText = ""
+    var isEnabled = true {
+        didSet {
+            if !isEnabled {
+                isPressed = false
+                setHovered(false)
+            }
+            updateAppearance()
+        }
+    }
     var isSelected = false {
         didSet { updateAppearance() }
     }
@@ -636,6 +649,7 @@ final class SnipToolButton: NSView {
     }
 
     func performClick() {
+        guard isEnabled else { return }
         isPressed = true
         updateAppearance()
         actionBlock()
@@ -734,6 +748,7 @@ final class SnipToolButton: NSView {
     }
 
     override func mouseDown(with event: NSEvent) {
+        guard isEnabled else { return }
         isPressed = true
         updateAppearance()
         performClick()
@@ -751,7 +766,10 @@ final class SnipToolButton: NSView {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         let fg: NSColor
-        if isPressed {
+        if !isEnabled {
+            layer?.backgroundColor = NSColor.clear.cgColor
+            fg = AppTheme.nsCaptureText.withAlphaComponent(0.35)
+        } else if isPressed {
             layer?.backgroundColor = AppTheme.nsCapturePressed.cgColor
             fg = .white
         } else if isSelected {

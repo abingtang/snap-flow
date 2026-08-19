@@ -14,6 +14,49 @@ final class ScreenRecordingEngineTests: XCTestCase {
         XCTAssertEqual(second.height, 2)
     }
 
+    func testCappedDimensionsScaleLandscapeRegionToMaximum() {
+        let dimensions = ScreenRecordingVideoEncoding.cappedEvenDimensions(
+            width: 3840,
+            height: 2160
+        )
+
+        XCTAssertEqual(dimensions.width, 1920)
+        XCTAssertEqual(dimensions.height, 1080)
+    }
+
+    func testCappedDimensionsPreservePortraitAspectRatio() {
+        let dimensions = ScreenRecordingVideoEncoding.cappedEvenDimensions(
+            width: 1080,
+            height: 1920
+        )
+
+        XCTAssertEqual(dimensions.width, 608)
+        XCTAssertEqual(dimensions.height, 1080)
+    }
+
+    func testCappedDimensionsKeepSmallerRegionUnchanged() {
+        let dimensions = ScreenRecordingVideoEncoding.cappedEvenDimensions(
+            width: 1280,
+            height: 720
+        )
+
+        XCTAssertEqual(dimensions.width, 1280)
+        XCTAssertEqual(dimensions.height, 720)
+    }
+
+    func testRegionPixelDimensionsUseTheRecordingMaximum() {
+        let region = CaptureRegion(
+            rectInScreenPoints: CGRect(x: 0, y: 0, width: 1920, height: 1080),
+            displayID: 1,
+            scaleFactor: 2
+        )
+
+        let dimensions = ScreenRecordingRegionGeometry.pixelDimensions(for: region)
+
+        XCTAssertEqual(dimensions.width, 1920)
+        XCTAssertEqual(dimensions.height, 1080)
+    }
+
     func testOutputSettingsUseFixedHighProfileThirtyFPS() {
         let settings = ScreenRecordingVideoEncoding.outputSettings(width: 1920, height: 1080)
         XCTAssertEqual(settings[AVVideoCodecKey] as? AVVideoCodecType, .h264)

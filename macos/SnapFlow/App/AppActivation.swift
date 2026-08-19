@@ -40,35 +40,88 @@ enum AppActivation {
     /// 激活本应用，并尽量不改变受保护窗相对其它 App 的叠放。
     static func activateWithoutRaisingAllWindows() {
         let anchor = captureProtectedStackAnchor()
-        if #available(macOS 14.0, *) {
-            NSApp.activate()
-        } else {
-            _ = NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps])
-        }
+        activateApplication()
         restoreProtectedStackAnchor(anchor)
         resignProtectedWindowKeyIfNeeded()
     }
 
     /// 激活并仅前置指定浮层 / 交互窗。
     static func focus(_ windows: [NSWindow], makeKey key: NSWindow? = nil) {
+        guard !windows.isEmpty else { return }
+
         let anchor = captureProtectedStackAnchor()
-        if #available(macOS 14.0, *) {
-            NSApp.activate()
-        } else {
-            _ = NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps])
-        }
+        activateApplication()
+
+        // accessory 应用没有 Dock 主窗口，单独 orderFrontRegardless 在部分系统状态下
+        // 只能让窗口保持 visible，不能可靠地压过当前前台 App；先 makeKeyAndOrderFront，
+        // 再 orderFrontRegardless，兼容新建窗和已经被其它 App 盖住的旧窗。
         for window in windows {
+            if window.isMiniaturized {
+                window.deminiaturize(nil)
+            }
+            window.makeKeyAndOrderFront(nil)
             window.orderFrontRegardless()
         }
         let keyWindow = key ?? windows.first
         keyWindow?.makeKey()
         restoreProtectedStackAnchor(anchor)
         resignProtectedWindowKeyIfNeeded()
+
+        // 状态栏菜单收起、应用激活和窗口排序可能分属不同的 run loop；下一拍再确认
+        // 一次，避免“窗口 isVisible 但仍在其它 App 后面”的偶发状态。
+        DispatchQueue.main.async { [weak keyWindow] in
+            guard let keyWindow else { return }
+            activateApplication()
+            for window in windows where window.isVisible {
+                window.orderFrontRegardless()
+            }
+            keyWindow.makeKey()
+            restoreProtectedStackAnchor(anchor)
+            resignProtectedWindowKeyIfNeeded()
+        }
     }
 
     /// 激活并前置单个窗（成为 key）。
     static func focus(_ window: NSWindow) {
         focus([window], makeKey: window)
+    }
+
+    /// 激活并前置当前应用的普通窗口。
+    ///
+    /// 与 `focus` 不同，这个方法不恢复受保护窗的跨应用叠放关系；适用于用户
+    /// 明确重新打开的设置/欢迎窗口——目标窗口本身就应该回到最上层。
+    static func bringToFront(_ window: NSWindow, makeKey: Bool = true) {
+        activateApplication()
+        if window.isMiniaturized {
+            window.deminiaturize(nil)
+        }
+        if makeKey {
+            window.makeKeyAndOrderFront(nil)
+        }
+        window.orderFrontRegardless()
+
+        // 状态栏菜单关闭后，窗口服务器有时会在当前 run loop 末尾重新计算层级。
+        // 再执行一次只影响这个目标窗口，不会把应用内其它窗口整体抬起。
+        DispatchQueue.main.async { [weak window] in
+            guard let window, window.isVisible else { return }
+            activateApplication()
+            if makeKey {
+                window.makeKeyAndOrderFront(nil)
+            }
+            window.orderFrontRegardless()
+        }
+    }
+
+    /// 只激活当前应用，不主动调整应用内窗口顺序。
+    ///
+    /// `NSApp.activate()` 是 accessory 应用的首选 API；同时调用
+    /// `NSRunningApplication.activate` 作为窗口服务器层兜底，解决从全局热键或
+    /// 状态栏菜单重新呼出窗口时应用仍处于 inactive 的情况。
+    private static func activateApplication() {
+        if #available(macOS 14.0, *) {
+            NSApp.activate()
+        }
+        _ = NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps])
     }
 
     // MARK: - Stack restore

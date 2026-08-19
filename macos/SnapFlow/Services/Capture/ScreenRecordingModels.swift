@@ -156,7 +156,7 @@ struct RecordingSystemAudioCaptureState: Sendable {
 
 enum ScreenRecordingRegionGeometry {
     static func pixelDimensions(for region: CaptureRegion) -> (width: Int, height: Int) {
-        ScreenRecordingVideoEncoding.evenDimensions(
+        ScreenRecordingVideoEncoding.cappedEvenDimensions(
             width: region.rectInScreenPoints.width * max(region.scaleFactor, 1),
             height: region.rectInScreenPoints.height * max(region.scaleFactor, 1)
         )

@@ -7760,19 +7760,19 @@
         }
       }
     },
-    "导出在后台进行，请稍候…" : {
+    "导出在后台进行，可取消；临时 MP4 会保留" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Export is running in the background. Please wait…"
+            "value" : "Export is running in the background. You can cancel; the temporary MP4 will be kept"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "导出在后台进行，请稍候…"
+            "value" : "导出在后台进行，可取消；临时 MP4 会保留"
           }
         }
       }
@@ -11449,19 +11449,19 @@
         }
       }
     },
-    "整段视频 · 原尺寸 · 15 FPS · 无音频" : {
+    "整段视频 · 最多 1920×1080 · 8 FPS · 无音频" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Full video · Original size · 15 FPS · No audio"
+            "value" : "Full video · Up to 1920×1080 · 8 FPS · No audio"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "整段视频 · 原尺寸 · 15 FPS · 无音频"
+            "value" : "整段视频 · 最多 1920×1080 · 8 FPS · 无音频"
           }
         }
       }
@@ -19269,19 +19269,19 @@
         }
       }
     },
-    "选择保存格式。GIF 不包含音频，且使用整段视频、原像素尺寸、15 FPS。" : {
+    "选择保存格式。GIF 不包含音频，整段视频最多使用 1920×1080、8 FPS。" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choose a save format. GIF has no audio and uses the full video, original pixel size, and 15 FPS."
+            "value" : "Choose a save format. GIF has no audio and uses the full video, up to 1920×1080, and 8 FPS."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "选择保存格式。GIF 不包含音频，且使用整段视频、原像素尺寸、15 FPS。"
+            "value" : "选择保存格式。GIF 不包含音频，整段视频最多使用 1920×1080、8 FPS。"
           }
         }
       }
@@ -20863,6 +20863,363 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "默认跟随系统语言；也可手动覆盖。"
+          }
+        }
+      }
+    },
+    "取消导出" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel Export"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消导出"
+          }
+        }
+      }
+    },
+    "取消 GIF 导出" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel GIF export"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消 GIF 导出"
+          }
+        }
+      }
+    },
+    "GIF 导出已取消，原 MP4 未改变" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GIF export cancelled; the original MP4 was not changed"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GIF 导出已取消，原 MP4 未改变"
+          }
+        }
+      }
+    },
+    "已处理 %lld/%lld 帧 · %.0f%%" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processed %lld/%lld frames · %.0f%%"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已处理 %lld/%lld 帧 · %.0f%%"
+          }
+        }
+      }
+    },
+    "正在准备 GIF 帧…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing GIF frames…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在准备 GIF 帧…"
+          }
+        }
+      }
+    },
+    "录制文件不存在，无法导出 GIF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recording file not found; cannot export GIF"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "录制文件不存在，无法导出 GIF"
+          }
+        }
+      }
+    },
+    "GIF 输出文件已存在，未覆盖原文件" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GIF output already exists; the original file was not overwritten"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GIF 输出文件已存在，未覆盖原文件"
+          }
+        }
+      }
+    },
+    "GIF 输出目录不可用" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GIF output directory is unavailable"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GIF 输出目录不可用"
+          }
+        }
+      }
+    },
+    "录制文件没有视频轨道，无法导出 GIF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recording file has no video track; cannot export GIF"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "录制文件没有视频轨道，无法导出 GIF"
+          }
+        }
+      }
+    },
+    "录制文件时长无效，无法导出 GIF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recording file duration is invalid; cannot export GIF"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "录制文件时长无效，无法导出 GIF"
+          }
+        }
+      }
+    },
+    "录制文件尺寸无效，无法导出 GIF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recording file dimensions are invalid; cannot export GIF"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "录制文件尺寸无效，无法导出 GIF"
+          }
+        }
+      }
+    },
+    "无法准备 GIF 导出" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to prepare GIF export"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法准备 GIF 导出"
+          }
+        }
+      }
+    },
+    "读取录制帧失败" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to read recording frames"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "读取录制帧失败"
+          }
+        }
+      }
+    },
+    "没有可用的视频帧可导出为 GIF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No video frames are available for GIF export"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有可用的视频帧可导出为 GIF"
+          }
+        }
+      }
+    },
+    "视频帧读取不完整，已停止 GIF 导出" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video frames were incomplete; GIF export stopped"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "视频帧读取不完整，已停止 GIF 导出"
+          }
+        }
+      }
+    },
+    "无法写入 GIF 视频帧" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to write GIF video frames"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法写入 GIF 视频帧"
+          }
+        }
+      }
+    },
+    "无法完成 GIF 写入" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to finish writing GIF"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法完成 GIF 写入"
+          }
+        }
+      }
+    },
+    "已取消 GIF 导出" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GIF export cancelled"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已取消 GIF 导出"
+          }
+        }
+      }
+    },
+    "GIF 导出预计占用资源过大，已保留 MP4" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GIF export is estimated to use too many resources; MP4 was retained"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GIF 导出预计占用资源过大，已保留 MP4"
+          }
+        }
+      }
+    },
+    "无法检查 GIF 导出所需磁盘空间" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to check disk space required for GIF export"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法检查 GIF 导出所需磁盘空间"
+          }
+        }
+      }
+    },
+    "磁盘空间不足，无法导出 GIF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not enough disk space for GIF export"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "磁盘空间不足，无法导出 GIF"
           }
         }
       }

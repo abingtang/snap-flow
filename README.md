@@ -19,7 +19,7 @@
 <p align="center">
   <img alt="macOS 15+" src="https://img.shields.io/badge/macOS-15%2B-111827?logo=apple&logoColor=white">
   <img alt="Swift 6" src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white">
-  <img alt="Version 0.0.5" src="https://img.shields.io/badge/version-0.0.5-orange">
+  <img alt="Version 0.0.6" src="https://img.shields.io/badge/version-0.0.6-orange">
 </p>
 
 SnapFlow is a macOS-first desktop utility for turning screen content into useful, reusable information. Capture a region, recognize text, translate it, annotate the result, and keep what matters for later.

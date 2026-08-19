@@ -1538,8 +1538,14 @@ final class PanelPresenter {
 
     func showClipboardHistory() {
         guard let container else { return }
-        if clipboardPanel?.isVisible == true {
-            closeClipboard()
+        if let panel = clipboardPanel, panel.isVisible {
+            // 面板仍 visible 但已被其它应用盖住时，重复快捷键应恢复前置；
+            // 只有面板本身仍是 key window 时才执行“再次呼出 = 关闭”。
+            if panel.isKeyWindow {
+                closeClipboard()
+            } else {
+                AppActivation.focus(panel)
+            }
             return
         }
 
@@ -2106,20 +2112,7 @@ final class PanelPresenter {
 
         // 用户主动打开：允许 key，并强制抬到最前（含「设置已开、菜单栏再点一次」）
         AppActivation.noteProtectedWindowUserInteraction()
-        _ = NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps])
-        window.makeKeyAndOrderFront(nil)
-        // accessory 下仅 makeKeyAndOrderFront 常压不过其它 App；无论 normal/floating 都 orderFrontRegardless 一次
-        window.orderFrontRegardless()
-
-        // 状态栏菜单收起瞬间可能抢走焦点，下一拍再提一次
-        DispatchQueue.main.async {
-            if NSApp.activationPolicy() != .accessory {
-                NSApp.setActivationPolicy(.accessory)
-            }
-            _ = NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps])
-            window.makeKeyAndOrderFront(nil)
-            window.orderFrontRegardless()
-        }
+        AppActivation.bringToFront(window)
     }
 
     func showPermissionAlert(for permission: AppPermission) {

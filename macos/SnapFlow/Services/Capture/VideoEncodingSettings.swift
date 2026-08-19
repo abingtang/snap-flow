@@ -2,6 +2,9 @@ import AVFoundation
 import CoreGraphics
 
 enum ScreenRecordingVideoEncoding {
+    static let maximumPixelWidth = 1_920
+    static let maximumPixelHeight = 1_080
+
     static func outputSettings(width: Int, height: Int) -> [String: Any] {
         let fps = ScreenRecordingConfiguration.frameRate
         let bitrate = bitrate(width: width, height: height, fps: fps)
@@ -31,6 +34,24 @@ enum ScreenRecordingVideoEncoding {
         return (
             width: max(((roundedWidth + 1) / 2) * 2, 2),
             height: max(((roundedHeight + 1) / 2) * 2, 2)
+        )
+    }
+
+    /// 将录制输出限制在产品最大尺寸内，同时保持宽高比。
+    static func cappedEvenDimensions(width: CGFloat, height: CGFloat) -> (width: Int, height: Int) {
+        guard width.isFinite, height.isFinite, width > 0, height > 0 else {
+            return (width: 2, height: 2)
+        }
+
+        let scale = min(
+            1,
+            CGFloat(maximumPixelWidth) / width,
+            CGFloat(maximumPixelHeight) / height
+        )
+        let dimensions = evenDimensions(width: width * scale, height: height * scale)
+        return (
+            width: min(dimensions.width, maximumPixelWidth),
+            height: min(dimensions.height, maximumPixelHeight)
         )
     }
 

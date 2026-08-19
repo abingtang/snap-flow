@@ -10,6 +10,11 @@ struct RecordingHistoryView: View {
     @State private var pendingDeleteID: String?
     @State private var confirmClear = false
     @State private var isExportingGIFID: String?
+    @State private var gifExportSession: RecordingExporter.GIFExportSession?
+    @State private var gifExportProgress = RecordingExporter.GIFExportProgress(
+        completedFrameCount: 0,
+        totalFrameCount: 0
+    )
 
     private var store: RecordingHistoryStore { container.recordingHistory }
     private var isRecordingActive: Bool { container.workflows.isRecordingActive }
@@ -202,12 +207,21 @@ struct RecordingHistoryView: View {
 
                 if item.format == .mp4 {
                     Button {
-                        exportGIF(from: item)
+                        if isExportingGIFID == item.id {
+                            gifExportSession?.cancel()
+                        } else {
+                            exportGIF(from: item)
+                        }
                     } label: {
                         Group {
                             if isExportingGIFID == item.id {
-                                ProgressView()
-                                    .controlSize(.small)
+                                if gifExportProgress.totalFrameCount > 0 {
+                                    ProgressView(value: gifExportProgress.fractionCompleted)
+                                        .controlSize(.small)
+                                } else {
+                                    ProgressView()
+                                        .controlSize(.small)
+                                }
                             } else {
                                 Image(systemName: "square.and.arrow.up.on.square")
                                     .settingsCompactText(weight: .semibold)
@@ -221,10 +235,16 @@ struct RecordingHistoryView: View {
                         )
                     }
                     .buttonStyle(.plain)
-                    .disabled(!item.fileExists || isRecordingActive || isExportingGIFID != nil)
+                    .disabled(
+                        !item.fileExists
+                            || isRecordingActive
+                            || (isExportingGIFID != nil && isExportingGIFID != item.id)
+                    )
                     .help(
                         isRecordingActive
                             ? L10n.string("录制进行中，暂不可导出 GIF")
+                            : isExportingGIFID == item.id
+                                ? L10n.string("取消 GIF 导出")
                             : L10n.string("从 MP4 导出 GIF（保留原 MP4）")
                     )
                     .onHover { hovering in
@@ -258,7 +278,11 @@ struct RecordingHistoryView: View {
                 Button(L10n.string("导出 GIF")) {
                     exportGIF(from: item)
                 }
-                .disabled(!item.fileExists || isRecordingActive || isExportingGIFID != nil)
+                .disabled(
+                    !item.fileExists
+                        || isRecordingActive
+                        || isExportingGIFID != nil
+                )
             }
             Divider()
             Button(L10n.string("删除"), role: .destructive) {
@@ -341,9 +365,20 @@ struct RecordingHistoryView: View {
 
     private func exportGIF(from item: RecordingHistoryItem) {
         guard item.format == .mp4, item.fileExists, !isRecordingActive else { return }
+        let session = RecordingExporter.GIFExportSession()
         isExportingGIFID = item.id
+        gifExportSession = session
+        gifExportProgress = RecordingExporter.GIFExportProgress(
+            completedFrameCount: 0,
+            totalFrameCount: 0
+        )
         Task { @MainActor in
-            defer { isExportingGIFID = nil }
+            let progressTask = monitorGIFExportProgress(session)
+            defer {
+                progressTask.cancel()
+                isExportingGIFID = nil
+                gifExportSession = nil
+            }
             do {
                 let counter = container.settings.nextRecordingFilenameCounter()
                 let destination = try ScreenRecordingFileStore.uniqueDestination(
@@ -351,7 +386,11 @@ struct RecordingHistoryView: View {
                     template: container.settings.recordingFilenameTemplate,
                     counter: counter
                 )
-                try await RecordingExporter.exportGIF(from: item.fileURL, to: destination)
+                try await RecordingExporter.exportGIF(
+                    from: item.fileURL,
+                    to: destination,
+                    session: session
+                )
                 let duration = item.durationSeconds
                 _ = store.register(
                     fileURL: destination,
@@ -371,10 +410,30 @@ struct RecordingHistoryView: View {
                     _ = FeatureHistoryIO.revealFileInFinder(destination)
                 }
             } catch {
-                FeedbackCenter.shared.post(
-                    String(format: L10n.string("GIF 导出失败：%@"), error.localizedDescription),
-                    level: .error
-                )
+                if let exportError = error as? RecordingExporter.ExportError,
+                   exportError == .cancelled {
+                    FeedbackCenter.shared.post(L10n.string("GIF 导出已取消，原 MP4 未改变"))
+                } else {
+                    FeedbackCenter.shared.post(
+                        String(format: L10n.string("GIF 导出失败：%@"), error.localizedDescription),
+                        level: .error
+                    )
+                }
+            }
+        }
+    }
+
+    private func monitorGIFExportProgress(
+        _ session: RecordingExporter.GIFExportSession
+    ) -> Task<Void, Never> {
+        Task { @MainActor in
+            while !Task.isCancelled {
+                gifExportProgress = session.progress
+                do {
+                    try await Task.sleep(for: .milliseconds(100))
+                } catch {
+                    break
+                }
             }
         }
     }

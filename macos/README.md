@@ -28,7 +28,7 @@ SnapFlow macOS is built with Swift 6, SwiftUI, AppKit, ScreenCaptureKit, Vision,
 
 | Item | Current value |
 |------|---------------|
-| Version | **0.0.5** |
+| Version | **0.0.6** |
 | System requirement | macOS 15.0 or later |
 | Technology | Swift 6 · SwiftUI + AppKit · ScreenCaptureKit · Vision · Translation |
 | Published architecture | Apple Silicon (`arm64`) |

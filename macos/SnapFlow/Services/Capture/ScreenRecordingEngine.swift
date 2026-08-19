@@ -138,7 +138,9 @@ final class ScreenRecordingEngine: NSObject, @unchecked Sendable {
             streamConfiguration.sampleRate = 44_100
             streamConfiguration.channelCount = 2
             streamConfiguration.pixelFormat = kCVPixelFormatType_32BGRA
-            streamConfiguration.scalesToFit = false
+            // 大型 Retina 选区的目标尺寸可能小于 sourceRect；缩放完整选区，不裁剪内容。
+            streamConfiguration.scalesToFit = true
+            streamConfiguration.preservesAspectRatio = true
             if #available(macOS 14.0, *) {
                 streamConfiguration.colorSpaceName = CGColorSpace.sRGB
             }

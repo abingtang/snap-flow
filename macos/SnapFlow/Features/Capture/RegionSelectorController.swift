@@ -13,6 +13,7 @@ import ScreenCaptureKit
 @MainActor
 enum RegionSelectorController {
     private static var activeSession: RegionSelectorSession?
+    private static var recordingActionEnabled = true
 
     static func forceCancel() {
         // 先停看门狗标记，避免强制退出循环；再拆会话
@@ -24,6 +25,11 @@ enum RegionSelectorController {
     /// 滚动截屏时保留选区窗口作为透明遮罩，让滚轮事件穿透到底层页面。
     static func setSnipWindowsPassThroughForScroll(_ enabled: Bool) {
         activeSession?.setWindowsPassThroughForScroll(enabled)
+    }
+
+    static func setRecordingActionEnabled(_ enabled: Bool) {
+        recordingActionEnabled = enabled
+        activeSession?.setRecordingActionEnabled(enabled)
     }
 
     static var isActive: Bool { activeSession != nil }
@@ -42,7 +48,11 @@ enum RegionSelectorController {
 
         return await withCheckedContinuation { continuation in
             var resumed = false
-            let session = RegionSelectorSession(settings: settings, purpose: purpose) { result in
+            let session = RegionSelectorSession(
+                settings: settings,
+                purpose: purpose,
+                recordingActionEnabled: recordingActionEnabled
+            ) { result in
                 guard !resumed else { return }
                 resumed = true
                 activeSession = nil
@@ -67,6 +77,7 @@ private final class RegionSelectorSession: NSObject {
     private let purpose: SnipPurpose
     private let completion: (SnipResult?) -> Void
     private var windows: [RegionSelectorWindow] = []
+    private var recordingActionEnabled: Bool
     private var finished = false
     private var globalEsc: Any?
     private var localKey: Any?
@@ -76,10 +87,12 @@ private final class RegionSelectorSession: NSObject {
     init(
         settings: SettingsStore,
         purpose: SnipPurpose,
+        recordingActionEnabled: Bool,
         completion: @escaping (SnipResult?) -> Void
     ) {
         self.settings = settings
         self.purpose = purpose
+        self.recordingActionEnabled = recordingActionEnabled
         self.completion = completion
     }
 
@@ -132,6 +145,7 @@ private final class RegionSelectorSession: NSObject {
                     self?.finish(result)
                 }
             )
+            window.selectionView.setRecordingActionEnabled(recordingActionEnabled)
             windows.append(window)
         }
         // 先完成离屏布局和绘制，再显示窗口，避免黑色背景先于截图图层出现。
@@ -192,6 +206,13 @@ private final class RegionSelectorSession: NSObject {
         }
         if !enabled {
             windows.first?.makeKey()
+        }
+    }
+
+    func setRecordingActionEnabled(_ enabled: Bool) {
+        recordingActionEnabled = enabled
+        for window in windows {
+            window.selectionView.setRecordingActionEnabled(enabled)
         }
     }
 
@@ -548,6 +569,10 @@ private final class RegionSelectionView: NSView {
 
         overlayView.activeRect = nil
         updateHelpText()
+    }
+
+    func setRecordingActionEnabled(_ enabled: Bool) {
+        actionToolbar.setActionEnabled(.record, enabled: enabled)
     }
 
     private func updateHelpText() {
